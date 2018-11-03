@@ -10,7 +10,7 @@
 #include <algorithm>
 #include <cmath>
 #include <map>
-#include <limits>
+
 
 //FUNCTIONS
 void interval_calculator();
@@ -29,6 +29,7 @@ std::map<std::string, int> oppCMDmap;
 std::vector<double> im_interval;
 std::vector<double> me_interval;
 
+
 //Program
 void error_interval(std::vector<double> inputs){
 	std::cout << "Error: invalid interval as "
@@ -38,12 +39,10 @@ void error_interval(std::vector<double> inputs){
 			  << std::endl;
 
 }
-
 std::vector<double> sort_vector(std::vector<double> vect){
 	std::sort(vect.begin(), vect.end());
 	return vect;
 }
-
 void print_vector(std::vector<double> vect){
 	if(!vect.empty()){
 		std::cout << "[";
@@ -88,11 +87,12 @@ void invert(){
 	}
 }
 void ms(){
+	me_interval.clear();
 	me_interval.assign(im_interval.begin(), im_interval.end());
 }
 void mr(){
 	if(!me_interval.empty()){
-		im_interval.assign(me_interval.begin(), im_interval.end());
+		im_interval.assign(im_interval.begin(), im_interval.end());
 	}
 }
 void mc(){
@@ -282,7 +282,6 @@ void cartesian_integers(std::vector<double> inputs){
 		error_interval(inputs);
 	}
 }
-
 void call_function(std::string oppCMD, std::vector<double> inputs){
 	if(oppCMD == "exit"){
 		exit();
@@ -328,7 +327,6 @@ void call_function(std::string oppCMD, std::vector<double> inputs){
 		cartesian_integers(inputs);
 	}
 }
-
 std::vector<double> placeInput(int num){
 	std::vector<double> banana;
 	for(int x = 0; x < num; x++){
@@ -343,12 +341,10 @@ std::vector<double> placeInput(int num){
 	}
 	return banana;
 }
-
 void clear_input(){
 	std::cin.clear();
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
-
 void initoppCMDmap(){
 	oppCMDmap["exit"]               = -1;
 	oppCMDmap["enter"]              =  2;
@@ -372,7 +368,6 @@ void initoppCMDmap(){
 	oppCMDmap["integers"]           =  0;
 	oppCMDmap["cartesian_integers"] =  2;
 }
-
 bool does_opp_exist(std::string input) {
 	auto search = oppCMDmap.find(input);
 	if(search == oppCMDmap.end()){
@@ -380,7 +375,6 @@ bool does_opp_exist(std::string input) {
 	}
 	return true;
 }
-
 void interval_calculator() {
 	bool key = true;
 
@@ -399,13 +393,17 @@ void interval_calculator() {
 			goto START;// or use continue;
 		}
 		//START OPERATIONS
-		int num_nums = oppCMDmap[oppCMD];
+		uint num_nums = oppCMDmap[oppCMD];
 		if(num_nums == -1){//QUIT
 			key = false;
 			exit();
 			break;
 		}
 		std::vector<double> inputs = placeInput(num_nums);
+
+		if(inputs.size() < num_nums){
+			goto START;
+		}
 
 		if(im_interval.empty() && oppCMD != "enter"){
 			print_vector(im_interval);
@@ -416,7 +414,6 @@ void interval_calculator() {
 		}
 	}
 }
-
 int main() {
 	initoppCMDmap();
 	interval_calculator();
